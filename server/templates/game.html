@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<p>
+<div id="board" style="position: relative; width:480; height:480;">
+
+<img id="a8" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:0; left:0;"     width=60 height=60>
+<img id="b8" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:0; left:60;"    width=60 height=60>
+<img id="c8" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:0; left:120;"   width=60 height=60>
+<img id="d8" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:0; left:180;"   width=60 height=60>
+<img id="e8" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:0; left:240;"   width=60 height=60>
+<img id="f8" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:0; left:300;"   width=60 height=60>
+<img id="g8" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:0; left:360;"   width=60 height=60>
+<img id="h8" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:0; left:420;"   width=60 height=60>
+
+<img id="a7" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:60; left:0;"    width=60 height=60>
+<img id="b7" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:60; left:60;"   width=60 height=60>
+<img id="c7" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:60; left:120;"  width=60 height=60>
+<img id="d7" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:60; left:180;"  width=60 height=60>
+<img id="e7" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:60; left:240;"  width=60 height=60>
+<img id="f7" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:60; left:300;"  width=60 height=60>
+<img id="g7" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:60; left:360;"  width=60 height=60>
+<img id="h7" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:60; left:420;"  width=60 height=60>
+
+<img id="a6" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:120; left:0;"   width=60 height=60>
+<img id="b6" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:120; left:60;"  width=60 height=60>
+<img id="c6" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:120; left:120;" width=60 height=60>
+<img id="d6" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:120; left:180;" width=60 height=60>
+<img id="e6" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:120; left:240;" width=60 height=60>
+<img id="f6" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:120; left:300;" width=60 height=60>
+<img id="g6" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:120; left:360;" width=60 height=60>
+<img id="h6" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:120; left:420;" width=60 height=60>
+
+<img id="a5" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:180; left:0;"   width=60 height=60>
+<img id="b5" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:180; left:60;"  width=60 height=60>
+<img id="c5" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:180; left:120;" width=60 height=60>
+<img id="d5" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:180; left:180;" width=60 height=60>
+<img id="e5" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:180; left:240;" width=60 height=60>
+<img id="f5" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:180; left:300;" width=60 height=60>
+<img id="g5" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:180; left:360;" width=60 height=60>
+<img id="h5" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:180; left:420;" width=60 height=60>
+
+<img id="a4" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:240; left:0;"   width=60 height=60>
+<img id="b4" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:240; left:60;"  width=60 height=60>
+<img id="c4" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:240; left:120;" width=60 height=60>
+<img id="d4" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:240; left:180;" width=60 height=60>
+<img id="e4" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:240; left:240;" width=60 height=60>
+<img id="f4" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:240; left:300;" width=60 height=60>
+<img id="g4" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:240; left:360;" width=60 height=60>
+<img id="h4" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:240; left:420;" width=60 height=60>
+
+<img id="a3" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:300; left:0;"   width=60 height=60>
+<img id="b3" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:300; left:60;"  width=60 height=60>
+<img id="c3" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:300; left:120;" width=60 height=60>
+<img id="d3" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:300; left:180;" width=60 height=60>
+<img id="e3" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:300; left:240;" width=60 height=60>
+<img id="f3" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:300; left:300;" width=60 height=60>
+<img id="g3" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:300; left:360;" width=60 height=60>
+<img id="h3" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:300; left:420;" width=60 height=60>
+
+<img id="a2" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:360; left:0;"   width=60 height=60>
+<img id="b2" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:360; left:60;"  width=60 height=60>
+<img id="c2" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:360; left:120;" width=60 height=60>
+<img id="d2" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:360; left:180;" width=60 height=60>
+<img id="e2" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:360; left:240;" width=60 height=60>
+<img id="f2" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:360; left:300;" width=60 height=60>
+<img id="g2" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:360; left:360;" width=60 height=60>
+<img id="h2" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:360; left:420;" width=60 height=60>
+
+<img id="a1" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:420; left:0;"   width=60 height=60>
+<img id="b1" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:420; left:60;"  width=60 height=60>
+<img id="c1" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:420; left:120;" width=60 height=60>
+<img id="d1" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:420; left:180;" width=60 height=60>
+<img id="e1" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:420; left:240;" width=60 height=60>
+<img id="f1" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:420; left:300;" width=60 height=60>
+<img id="g1" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:420; left:360;" width=60 height=60>
+<img id="h1" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:420; left:420;" width=60 height=60>
+
+<img id="piece_0" src="{{url_for("static", filename="board_images/rlt60.png")}}" style="position:absolute; top:420; left:0;">
+<img id="piece_1" src="{{url_for("static", filename="board_images/nlt60.png")}}" style="position:absolute; top:420; left:60;">
+<img id="piece_2" src="{{url_for("static", filename="board_images/blt60.png")}}" style="position:absolute; top:420; left:120;">
+<img id="piece_3" src="{{url_for("static", filename="board_images/qlt60.png")}}" style="position:absolute; top:420; left:180;">
+<img id="piece_4" src="{{url_for("static", filename="board_images/klt60.png")}}" style="position:absolute; top:420; left:240;">
+<img id="piece_5" src="{{url_for("static", filename="board_images/blt60.png")}}" style="position:absolute; top:420; left:300;">
+<img id="piece_6" src="{{url_for("static", filename="board_images/nlt60.png")}}" style="position:absolute; top:420; left:360;">
+<img id="piece_7" src="{{url_for("static", filename="board_images/rlt60.png")}}" style="position:absolute; top:420; left:420;">
+
+<img id="piece_0" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:0;">
+<img id="piece_1" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:60;">
+<img id="piece_2" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:120;">
+<img id="piece_3" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:180;">
+<img id="piece_4" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:240;">
+<img id="piece_5" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:300;">
+<img id="piece_6" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:360;">
+<img id="piece_7" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:420;">
+
+<img id="piece_0" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:0;">
+<img id="piece_1" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:60;">
+<img id="piece_2" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:120;">
+<img id="piece_3" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:180;">
+<img id="piece_4" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:240;">
+<img id="piece_5" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:300;">
+<img id="piece_6" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:360;">
+<img id="piece_7" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:420;">
+
+<img id="piece_0" src="{{url_for("static", filename="board_images/rdt60.png")}}" style="position:absolute; top:0; left:0;">
+<img id="piece_1" src="{{url_for("static", filename="board_images/ndt60.png")}}" style="position:absolute; top:0; left:60;">
+<img id="piece_2" src="{{url_for("static", filename="board_images/bdt60.png")}}" style="position:absolute; top:0; left:120;">
+<img id="piece_3" src="{{url_for("static", filename="board_images/qdt60.png")}}" style="position:absolute; top:0; left:180;">
+<img id="piece_4" src="{{url_for("static", filename="board_images/kdt60.png")}}" style="position:absolute; top:0; left:240;">
+<img id="piece_5" src="{{url_for("static", filename="board_images/bdt60.png")}}" style="position:absolute; top:0; left:300;">
+<img id="piece_6" src="{{url_for("static", filename="board_images/ndt60.png")}}" style="position:absolute; top:0; left:360;">
+<img id="piece_7" src="{{url_for("static", filename="board_images/rdt60.png")}}" style="position:absolute; top:0; left:420;">
+
+<div style="position:absolute; top:30; left:510;">
+
+<!-- NOTE: We're assuming that the user loaded game/1/2, and that there are 2 rounds of valid moves.  We'll make this more dynamic later -->
+
+<!-- TODO: Show invalidated moves with STRIKETHROUGH -->
+
+<table width=200>
+  <tr> <td>1.</td> <td>e4</td> <td>e5</td> </tr>
+  <tr> <td>2.</td> <td><b><font color=red>Ng3</font></b></td> <td>Nc6</td> </tr>
+</table>
+
+<p>
+<b><font size=+2>NOTE:</font></b>
+<br>You are viewing a position in the <b>past</b>.  Any move that you make
+    will <b>alter the past!</b>
+
+</div>
+
+</div>
+
+<a href="{{url_for("game", gameID=1, moveNum=1)}}">&lt;&lt;</a>
+&nbsp; &nbsp; &nbsp; &nbsp;
+<a href="{{url_for("game", gameID=1, moveNum=1)}}">&lt;</a>
+&nbsp; &nbsp; &nbsp; &nbsp;
+  Current Position: <b>Past</b> Move 2 of 2
+&nbsp; &nbsp; &nbsp; &nbsp;
+<a href="{{url_for("game", gameID=1, moveNum=3)}}">&gt;</a>
+&nbsp; &nbsp; &nbsp; &nbsp;
+<a href="{{url_for("game", gameID=1)}}">&gt;&gt;</a>
+
+
+
+{% endblock %}
+

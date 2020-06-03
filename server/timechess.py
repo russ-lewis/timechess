@@ -32,12 +32,27 @@ def get_db():
 @app.route("/")
 def index():
     db = get_db()
-
     (sessionID, google_account) = sessions.get_session(db,
                                                lambda key: request.cookies.get(key),
                                                None,
                                                ["google_account"])
 
     return render_template("index.html", sessionID=sessionID, mail=google_account)
+
+
+
+@app.route("/game/<int:gameID>", defaults={"moveNum": -1})
+@app.route("/game/<int:gameID>/<int:moveNum>")
+def game(gameID, moveNum):
+    db = get_db()
+    (sessionID, google_account) = sessions.get_session(db,
+                                               lambda key: request.cookies.get(key),
+                                               None,
+                                               ["google_account"])
+
+    # TODO: confirm that the game ID is valid.  Or should this be a function
+    #       of the Javascript code???
+
+    return render_template("game.html", sessionID=sessionID, mail=google_account, gameID=gameID)
 
 

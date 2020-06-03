@@ -1,1 +1,1 @@
-Source for icons: (https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces)
+Source for icons: (https://commons.wikimedia.org/wiki/Category:PNG_chess_pieces/Standard_transparent)
