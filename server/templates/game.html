@@ -3,7 +3,7 @@
 {% block body %}
 
 <p>
-<div id="board" style="position: relative; width:480; height:480;">
+<div id="board" style="position:relative; width:480; height:600;">
 
 <img id="a8" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:0; left:0;"     width=60 height=60>
 <img id="b8" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:0; left:60;"    width=60 height=60>
@@ -113,16 +113,40 @@
 <img id="piece_6" src="{{url_for("static", filename="board_images/ndt60.png")}}" style="position:absolute; top:0; left:360;">
 <img id="piece_7" src="{{url_for("static", filename="board_images/rdt60.png")}}" style="position:absolute; top:0; left:420;">
 
-<div style="position:absolute; top:30; left:510;">
+
+
+<div style="position:absolute; top:30; left:510">
 
 <!-- NOTE: We're assuming that the user loaded game/1/2, and that there are 2 rounds of valid moves.  We'll make this more dynamic later -->
 
 <!-- TODO: Show invalidated moves with STRIKETHROUGH -->
 
 <table width=200>
-  <tr> <td>1.</td> <td>e4</td> <td>e5</td> </tr>
-  <tr> <td>2.</td> <td><b><font color=red>Ng3</font></b></td> <td>Nc6</td> </tr>
+  {% for moveNum in range(len(moves)) %}
+    {% if moveNum+1 != cur_move %}
+      <tr> <td>{{moveNum+1}}.</td> <td>{{moves[moveNum][0]}}</td> <td>{{moves[moveNum][1]}}</td> </tr>
+    {% elif curMover==0 %}
+      <tr> <td>{{moveNum+1}}.</td> <td><b><font color=red>{{moves[moveNum][0]}}</font></b></td> <td>{{moves[moveNum][1]}}</td> </tr>
+    {% else %}
+      <tr> <td>{{moveNum+1}}.</td> <td>{{moves[moveNum][0]}}</td> <td><b><font color=red>{{moves[moveNum][1]}}</font></b></td> </tr>
+    {% endif %}
+  {% endfor %}
 </table>
+
+</div>
+
+
+
+<div style="position:absolute; top:510; left:0; width:480; display:flex; justify-content:space-around; align-items:center">
+  <a href="{{url_for("game", gameID=gameID, moveNum=1)}}">&lt;&lt;</a>
+  <a href="{{url_for("game", gameID=gameID, moveNum=cur_move-1)}}">&lt;</a>
+  <div align=center>Current Position:
+       <br><b>Past</b> Move {{cur_move}} of {{len(moves)}}</div>
+  <a href="{{url_for("game", gameID=gameID, moveNum=cur_move+1)}}">&gt;</a>
+  <a href="{{url_for("game", gameID=gameID, moveNum=len(moves)+1)}}">&gt;&gt;</a> 
+</div>
+
+
 
 <p>
 <b><font size=+2>NOTE:</font></b>
@@ -130,19 +154,7 @@
     will <b>alter the past!</b>
 
 </div>
-
 </div>
-
-<a href="{{url_for("game", gameID=1, moveNum=1)}}">&lt;&lt;</a>
-&nbsp; &nbsp; &nbsp; &nbsp;
-<a href="{{url_for("game", gameID=1, moveNum=1)}}">&lt;</a>
-&nbsp; &nbsp; &nbsp; &nbsp;
-  Current Position: <b>Past</b> Move 2 of 2
-&nbsp; &nbsp; &nbsp; &nbsp;
-<a href="{{url_for("game", gameID=1, moveNum=3)}}">&gt;</a>
-&nbsp; &nbsp; &nbsp; &nbsp;
-<a href="{{url_for("game", gameID=1)}}">&gt;&gt;</a>
-
 
 
 {% endblock %}

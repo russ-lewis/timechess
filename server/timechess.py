@@ -41,7 +41,6 @@ def index():
 
 
 
-@app.route("/game/<int:gameID>", defaults={"moveNum": -1})
 @app.route("/game/<int:gameID>/<int:moveNum>")
 def game(gameID, moveNum):
     db = get_db()
@@ -53,6 +52,15 @@ def game(gameID, moveNum):
     # TODO: confirm that the game ID is valid.  Or should this be a function
     #       of the Javascript code???
 
-    return render_template("game.html", sessionID=sessionID, mail=google_account, gameID=gameID)
+
+
+    moves = [("e4",  "e5"),
+             ("Ng3", "Nc6")]
+
+    return render_template("game.html",
+                           sessionID=sessionID, mail=google_account,
+                           gameID=gameID, cur_move=2, moves=moves,
+                           curMover=0,
+                           len=len)
 
 
