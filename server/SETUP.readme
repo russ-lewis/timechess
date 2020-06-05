@@ -1,0 +1,6 @@
+You need to install the 'python-chess' library:
+  pip install python-chess==0.23
+
+TODO: Port this Flask code to Python 3, so that we can remove the
+      specific-version dependency in the pip command
+

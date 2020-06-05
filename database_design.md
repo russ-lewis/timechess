@@ -11,4 +11,4 @@ TABLE: games
    INTEGER    gameID FOREIGN KEY (games.id)
    INTEGER(3) num    NOT NULL
    CHAR       color  NOT NULL
-   VARCHAR(5) move   NOT NULL   # use standard encoding.  Worst case: Naxb3,0-0-0  Special cases: WhRes BlRes Draw.  No "notes", such as "+" (for Check), "e.p.", or commentary.
+   VARCHAR(7) move   NOT NULL   # use standard encoding (except that you can *PREFIX* with ~ to indicate an invalidated move).  Worst case: cxd8=Q  Special cases: WhRes BlRes Draw.  No "notes", such as "+" (for Check), "e.p.", or commentary.
