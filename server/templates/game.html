@@ -77,6 +77,11 @@
 <img id="g1" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:420; left:360;" width=60 height=60>
 <img id="h1" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:420; left:420;" width=60 height=60>
 
+{% for p in pieces: %}
+   <img src="{{p[0]}}" style="position:absolute; top:{{p[2]*60}}; left:{{p[1]*60}};">
+{% endfor %}
+
+<!--
 <img id="piece_0" src="{{url_for("static", filename="board_images/rlt60.png")}}" style="position:absolute; top:420; left:0;">
 <img id="piece_1" src="{{url_for("static", filename="board_images/nlt60.png")}}" style="position:absolute; top:420; left:60;">
 <img id="piece_2" src="{{url_for("static", filename="board_images/blt60.png")}}" style="position:absolute; top:420; left:120;">
@@ -86,32 +91,33 @@
 <img id="piece_6" src="{{url_for("static", filename="board_images/nlt60.png")}}" style="position:absolute; top:420; left:360;">
 <img id="piece_7" src="{{url_for("static", filename="board_images/rlt60.png")}}" style="position:absolute; top:420; left:420;">
 
-<img id="piece_0" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:0;">
-<img id="piece_1" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:60;">
-<img id="piece_2" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:120;">
-<img id="piece_3" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:180;">
-<img id="piece_4" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:240;">
-<img id="piece_5" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:300;">
-<img id="piece_6" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:360;">
-<img id="piece_7" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:420;">
+<img id="piece_8" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:0;">
+<img id="piece_9" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:60;">
+<img id="piece_10" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:120;">
+<img id="piece_11" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:180;">
+<img id="piece_12" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:240;">
+<img id="piece_13" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:300;">
+<img id="piece_14" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:360;">
+<img id="piece_15" src="{{url_for("static", filename="board_images/plt60.png")}}" style="position:absolute; top:360; left:420;">
 
-<img id="piece_0" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:0;">
-<img id="piece_1" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:60;">
-<img id="piece_2" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:120;">
-<img id="piece_3" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:180;">
-<img id="piece_4" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:240;">
-<img id="piece_5" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:300;">
-<img id="piece_6" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:360;">
-<img id="piece_7" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:420;">
+<img id="piece_16" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:0;">
+<img id="piece_17" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:60;">
+<img id="piece_18" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:120;">
+<img id="piece_19" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:180;">
+<img id="piece_20" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:240;">
+<img id="piece_21" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:300;">
+<img id="piece_22" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:360;">
+<img id="piece_23" src="{{url_for("static", filename="board_images/pdt60.png")}}" style="position:absolute; top:60; left:420;">
 
-<img id="piece_0" src="{{url_for("static", filename="board_images/rdt60.png")}}" style="position:absolute; top:0; left:0;">
-<img id="piece_1" src="{{url_for("static", filename="board_images/ndt60.png")}}" style="position:absolute; top:0; left:60;">
-<img id="piece_2" src="{{url_for("static", filename="board_images/bdt60.png")}}" style="position:absolute; top:0; left:120;">
-<img id="piece_3" src="{{url_for("static", filename="board_images/qdt60.png")}}" style="position:absolute; top:0; left:180;">
-<img id="piece_4" src="{{url_for("static", filename="board_images/kdt60.png")}}" style="position:absolute; top:0; left:240;">
-<img id="piece_5" src="{{url_for("static", filename="board_images/bdt60.png")}}" style="position:absolute; top:0; left:300;">
-<img id="piece_6" src="{{url_for("static", filename="board_images/ndt60.png")}}" style="position:absolute; top:0; left:360;">
-<img id="piece_7" src="{{url_for("static", filename="board_images/rdt60.png")}}" style="position:absolute; top:0; left:420;">
+<img id="piece_24" src="{{url_for("static", filename="board_images/rdt60.png")}}" style="position:absolute; top:0; left:0;">
+<img id="piece_25" src="{{url_for("static", filename="board_images/ndt60.png")}}" style="position:absolute; top:0; left:60;">
+<img id="piece_26" src="{{url_for("static", filename="board_images/bdt60.png")}}" style="position:absolute; top:0; left:120;">
+<img id="piece_27" src="{{url_for("static", filename="board_images/qdt60.png")}}" style="position:absolute; top:0; left:180;">
+<img id="piece_28" src="{{url_for("static", filename="board_images/kdt60.png")}}" style="position:absolute; top:0; left:240;">
+<img id="piece_29" src="{{url_for("static", filename="board_images/bdt60.png")}}" style="position:absolute; top:0; left:300;">
+<img id="piece_30" src="{{url_for("static", filename="board_images/ndt60.png")}}" style="position:absolute; top:0; left:360;">
+<img id="piece_31" src="{{url_for("static", filename="board_images/rdt60.png")}}" style="position:absolute; top:0; left:420;">
+  -->
 
 
 
@@ -122,16 +128,36 @@
 <!-- TODO: Show invalidated moves with STRIKETHROUGH -->
 
 <table width=200>
-  {% for moveNum in range(len(moves)) %}
+  {% for moveNum in range(history|length) %}
     {% if moveNum+1 != cur_move %}
-      <tr> <td>{{moveNum+1}}.</td> <td>{{moves[moveNum][0]}}</td> <td>{{moves[moveNum][1]}}</td> </tr>
+      <tr> <td>{{moveNum+1}}.</td> <td>{{history[moveNum][0]}}</td> <td>{{history[moveNum][1]}}</td> </tr>
     {% elif curMover==0 %}
-      <tr> <td>{{moveNum+1}}.</td> <td><b><font color=red>{{moves[moveNum][0]}}</font></b></td> <td>{{moves[moveNum][1]}}</td> </tr>
+      <tr> <td>{{moveNum+1}}.</td> <td><b><font color=red>{{history[moveNum][0]}}</font></b></td> <td>{{history[moveNum][1]}}</td> </tr>
     {% else %}
-      <tr> <td>{{moveNum+1}}.</td> <td>{{moves[moveNum][0]}}</td> <td><b><font color=red>{{moves[moveNum][1]}}</font></b></td> </tr>
+      <tr> <td>{{moveNum+1}}.</td> <td>{{history[moveNum][0]}}</td> <td><b><font color=red>{{history[moveNum][1]}}</font></b></td> </tr>
     {% endif %}
   {% endfor %}
 </table>
+
+<pre>
+{{board}}
+</pre>
+
+<p>
+<b>Legal Moves:</b>
+
+<div style="display:flex; flex-flow:row wrap;">
+{% for lm in legal_moves: %}
+  <div>
+    <form action="{{url_for("move")}}" method=POST>
+      <input type=hidden name="gameID"  value="{{gameID}}">
+      <input type=hidden name="moveNum" value="{{cur_move}}">
+      <input type=hidden name="move"    value="{{lm}}">
+      <input type=submit value="{{lm}}">
+    </form>
+  </div>
+{% endfor %}
+</div>
 
 </div>
 
@@ -141,9 +167,9 @@
   <a href="{{url_for("game", gameID=gameID, moveNum=1)}}">&lt;&lt;</a>
   <a href="{{url_for("game", gameID=gameID, moveNum=cur_move-1)}}">&lt;</a>
   <div align=center>Current Position:
-       <br><b>Past</b> Move {{cur_move}} of {{len(moves)}}</div>
+       <br><b>Past</b> Move {{cur_move}} of {{moves|length}}</div>
   <a href="{{url_for("game", gameID=gameID, moveNum=cur_move+1)}}">&gt;</a>
-  <a href="{{url_for("game", gameID=gameID, moveNum=len(moves)+1)}}">&gt;&gt;</a> 
+  <a href="{{url_for("game", gameID=gameID, moveNum=moves|length+1)}}">&gt;&gt;</a> 
 </div>
 
 

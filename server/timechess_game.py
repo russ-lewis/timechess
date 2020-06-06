@@ -3,10 +3,6 @@ import chess   # standard library: python-chess
 
 
 
-NOTES:
-
-
-
 class TimeChess_Game:
     """Models the history of a TimeChess game; it has a sequence of moves
        (some of which are invalidated, or are "pass").  It keeps a chess.Board
