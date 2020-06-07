@@ -146,7 +146,7 @@
 <p>
 <b>Legal Moves:</b>
 
-<div style="display:flex; flex-flow:row wrap;">
+<div style="display:flex; flex-flow:row wrap; justify-content: space-between;">
 {% for lm in legal_moves: %}
   <div>
     <form action="{{url_for("move")}}" method=POST>
