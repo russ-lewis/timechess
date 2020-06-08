@@ -43,8 +43,8 @@ def index():
 
 
 
-@app.route("/game/<int:gameID>/<int:moveNum>")
-def game(gameID, moveNum):
+@app.route("/game/<int:gameID>/<int:pos>")
+def game(gameID, pos):
     db = get_db()
     (sessionID, google_account) = sessions.get_session(db,
                                                lambda key: request.cookies.get(key),
@@ -56,8 +56,7 @@ def game(gameID, moveNum):
 
 
 
-    history = [("e4",  "e5"),
-               ("Ng3", "Nc6")]
+    history = ["e4",  "e5", "Ng3", "Nc6"]
 
     game = TimeChess_Game()
     game.add_to_history("e4")
@@ -82,9 +81,9 @@ def game(gameID, moveNum):
         
 
     return render_template("game.html",
-                           sessionID=sessionID, mail=google_account,
-                           gameID=gameID, cur_move=2, history=history,
-                           curMover=0, legal_moves=legal_moves,
+                           gameID=gameID,
+                           history=history, pos=pos,
+                           legal_moves=legal_moves,
                            board=str(game.board), pieces=pieces)
 
 

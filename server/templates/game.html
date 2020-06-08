@@ -128,13 +128,18 @@
 <!-- TODO: Show invalidated moves with STRIKETHROUGH -->
 
 <table width=200>
-  {% for moveNum in range(history|length) %}
-    {% if moveNum+1 != cur_move %}
-      <tr> <td>{{moveNum+1}}.</td> <td>{{history[moveNum][0]}}</td> <td>{{history[moveNum][1]}}</td> </tr>
-    {% elif curMover==0 %}
-      <tr> <td>{{moveNum+1}}.</td> <td><b><font color=red>{{history[moveNum][0]}}</font></b></td> <td>{{history[moveNum][1]}}</td> </tr>
+  {% for i in range(history|length) %}
+    {% if i%2 == 0 %}
+      <tr> <td>{{(i//2)+1}}.</td> 
+    {% endif %}
+    {% if i+1 == pos %}
+           <td><b><font color=red>{{history[i]}}</font></b></td>
     {% else %}
-      <tr> <td>{{moveNum+1}}.</td> <td>{{history[moveNum][0]}}</td> <td><b><font color=red>{{history[moveNum][1]}}</font></b></td> </tr>
+           <td>{{history[i]}}</td>
+    {% endif %}
+
+    {% if i%2 == 1 or i+1 == history|length %}
+      </tr>
     {% endif %}
   {% endfor %}
 </table>
@@ -150,9 +155,9 @@
 {% for lm in legal_moves: %}
   <div>
     <form action="{{url_for("move")}}" method=POST>
-      <input type=hidden name="gameID"  value="{{gameID}}">
-      <input type=hidden name="moveNum" value="{{cur_move}}">
-      <input type=hidden name="move"    value="{{lm}}">
+      <input type=hidden name="gameID" value="{{gameID}}">
+      <input type=hidden name="pos"    value="{{pos}}">
+      <input type=hidden name="move"   value="{{lm}}">
       <input type=submit value="{{lm}}">
     </form>
   </div>
@@ -164,12 +169,12 @@
 
 
 <div style="position:absolute; top:510; left:0; width:480; display:flex; justify-content:space-around; align-items:center">
-  <a href="{{url_for("game", gameID=gameID, moveNum=1)}}">&lt;&lt;</a>
-  <a href="{{url_for("game", gameID=gameID, moveNum=cur_move-1)}}">&lt;</a>
+  <a href="{{url_for("game", gameID=gameID, pos=1)}}">&lt;&lt;</a>
+  <a href="{{url_for("game", gameID=gameID, pos=pos-1)}}">&lt;</a>
   <div align=center>Current Position:
-       <br><b>Past</b> Move {{cur_move}} of {{moves|length}}</div>
-  <a href="{{url_for("game", gameID=gameID, moveNum=cur_move+1)}}">&gt;</a>
-  <a href="{{url_for("game", gameID=gameID, moveNum=moves|length+1)}}">&gt;&gt;</a> 
+       <br><b>Past</b> Half-Move {{pos}} of {{history|length}}</div>
+  <a href="{{url_for("game", gameID=gameID, pos=pos+1)}}">&gt;</a>
+  <a href="{{url_for("game", gameID=gameID, pos=moves|length+1)}}">&gt;&gt;</a> 
 </div>
 
 
