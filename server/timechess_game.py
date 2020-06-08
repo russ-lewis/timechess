@@ -56,7 +56,16 @@ class TimeChess_Game:
     def is_game_over(self):
         return self.board.is_game_over()
 
-    def legal_moves(self):
-        return self.board.legal_moves
+    def legal_moves_san(self):
+        return [self.board.san(m) for m in self.board.legal_moves]
+
+    def piece_list_xy(self):
+        piece_map = self.board.piece_map()
+        retval = []
+        for sq in piece_map:
+            x =   chess.square_file(sq)
+            y = 7-chess.square_rank(sq)
+            retval.append( (x,y, piece_map[sq].symbol()) )
+        return retval
 
 

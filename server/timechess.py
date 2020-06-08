@@ -9,7 +9,6 @@ import sessions
 import oauth
 
 from timechess_game import TimeChess_Game
-import chess
 
 
 
@@ -62,23 +61,14 @@ def game(gameID, pos):
     game.add_to_history("e4")
     game.add_to_history("e5")
 
-    legal_moves = [game.board.san(m) for m in game.legal_moves()]
+    legal_moves = game.legal_moves_san()
 
-    pieces = []
-    piece_map = game.board.piece_map()
-    for sq in piece_map:
-        p = piece_map[sq]
-
-        color = 'l' if p.symbol().isupper() else 'd'
-        kind  = p.symbol().lower()
+    def piece_url(sym):
+        color = 'l' if sym.isupper() else 'd'
+        kind  = sym.lower()
         path  = "board_images/{}{}t60.png".format(kind,color)
-        url   = url_for("static", filename=path)
-
-        x =   chess.square_file(sq)
-        y = 7-chess.square_rank(sq)
-
-        pieces.append( (url,x,y) )
-        
+        return url_for("static", filename=path)
+    pieces = [ (piece_url(sym),x,y) for (x,y,sym) in game.piece_list_xy() ]
 
     return render_template("game.html",
                            gameID=gameID,
