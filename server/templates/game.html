@@ -32,7 +32,7 @@
     {% if i%2 == 0 %}
       <tr> <td>{{(i//2)+1}}.</td> 
     {% endif %}
-    {% if i+1 == pos %}
+    {% if i+1 == halfMoveNum %}
            <td><b><font color=red>{{history[i]}}</font></b></td>
     {% else %}
            <td>{{history[i]}}</td>
@@ -56,7 +56,7 @@
   <div>
     <form action="{{url_for("move")}}" method=POST>
       <input type=hidden name="gameID" value="{{gameID}}">
-      <input type=hidden name="pos"    value="{{pos}}">
+      <input type=hidden name="hmNum"  value="{{halfMoveNum}}">
       <input type=hidden name="move"   value="{{lm}}">
       <input type=submit value="{{lm}}">
     </form>
@@ -69,12 +69,12 @@
 
 
 <div style="position:absolute; top:510; left:0; width:480; display:flex; justify-content:space-around; align-items:center">
-  <a href="{{url_for("game", gameID=gameID, pos=1)}}">&lt;&lt;</a>
-  <a href="{{url_for("game", gameID=gameID, pos=pos-1)}}">&lt;</a>
+  <a href="{{url_for("game", gameID=gameID, halfMoveNum=1)}}">&lt;&lt;</a>
+  <a href="{{url_for("game", gameID=gameID, halfMoveNum=halfMoveNum-1)}}">&lt;</a>
   <div align=center>Current Position:
-       <br><b>Past</b> Half-Move {{pos}} of {{history|length}}</div>
-  <a href="{{url_for("game", gameID=gameID, pos=pos+1)}}">&gt;</a>
-  <a href="{{url_for("game", gameID=gameID, pos=moves|length+1)}}">&gt;&gt;</a> 
+       <br><b>Past</b> Half-Move {{halfMoveNum}} of {{history|length}}</div>
+  <a href="{{url_for("game", gameID=gameID, halfMoveNum=halfMoveNum+1)}}">&gt;</a>
+  <a href="{{url_for("game", gameID=gameID, halfMoveNum=moves|length+1)}}">&gt;&gt;</a> 
 </div>
 
 
