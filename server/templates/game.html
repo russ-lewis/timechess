@@ -5,35 +5,35 @@
 <div id="everything" style="width:800; margin:0 auto;">
 
 <p>
-<div id="board" style="position:relative; width:480; height:600;">
+<div id="board" style="position:relative; width:480px; height:600px;">
 
 {% for x in range(8) %} {% for y in range(8) %}
   {% if (x+y)%2 == 0 %}
-    <img id="a8" src="{{url_for("static", filename="board_images/l44.png")}}" style="position:absolute; top:{{y*60}}; left:{{x*60}};"     width=60 height=60>
+    <img src="{{url_for("static", filename="board_images/l44.png")}}" alt="chessboard square" style="position:absolute; top:{{y*60}}px; left:{{x*60}}px;"     width=60px height=60px>
   {% else %}
-    <img id="b8" src="{{url_for("static", filename="board_images/d44.png")}}" style="position:absolute; top:{{y*60}}; left:{{x*60}};"    width=60 height=60>
+    <img src="{{url_for("static", filename="board_images/d44.png")}}" alt="chessboard square" style="position:absolute; top:{{y*60}}px; left:{{x*60}}px;"    width=60px height=60px>
   {% endif %}
 {% endfor %} {% endfor %}
 
 {% for p in pieces: %}
-   <img src="{{p[0]}}" style="position:absolute; top:{{p[2]*60}}; left:{{p[1]*60}};">
+   <img src="{{p[0]}}" alt="chess piece" style="position:absolute; top:{{p[2]*60}}px; left:{{p[1]*60}}px;">
 {% endfor %}
 
 
 
-<div style="position:absolute; top:30; left:510">
+<div style="position:absolute; top:30px; left:510px">
 
 <!-- NOTE: We're assuming that the user loaded game/1/2, and that there are 2 rounds of valid moves.  We'll make this more dynamic later -->
 
 <!-- TODO: Show invalidated moves with STRIKETHROUGH -->
 
-<table width=200>
+<table width=200px>
   {% for i in range(history|length) %}
     {% if i%2 == 0 %}
       <tr> <td>{{(i//2)+1}}.</td> 
     {% endif %}
     {% if i+1 == halfMoveNum %}
-           <td><b><font color=red>{{history[i]}}</font></b></td>
+           <td><b style="color:red">{{history[i]}}</b></td>
     {% else %}
            <td>{{history[i]}}</td>
     {% endif %}
@@ -68,7 +68,7 @@
 
 
 
-<div style="position:absolute; top:510; left:0; width:480; display:flex; justify-content:space-around; align-items:center">
+<div style="position:absolute; top:510px; left:0px; width:480px; display:flex; justify-content:space-around; align-items:center">
   <a href="{{url_for("game", gameID=gameID, halfMoveNum=1)}}">&lt;&lt;</a>
   <a href="{{url_for("game", gameID=gameID, halfMoveNum=halfMoveNum-1)}}">&lt;</a>
   <div align=center>Current Position:
@@ -80,7 +80,7 @@
 
 
 <p>
-<b><font size=+2>NOTE:</font></b>
+<h2>NOTE:</h2>
 <br>You are viewing a position in the <b>past</b>.  Any move that you make
     will <b>alter the past!</b>
 
