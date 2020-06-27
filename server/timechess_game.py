@@ -24,9 +24,16 @@ class TimeChess_Game:
         # the caller must check for this!
         assert not self.board.is_game_over()
 
-        if move == "pass":
+        if move == "Pass":
             self.board.push(chess.Move.null())
             return None
+
+        if move == "WhRes":
+            TODO
+        if move == "BlRes":
+            TODO
+        if move == "Draw":
+            TODO
 
         if move[0] == '~':
             base_move = move[1:]

@@ -15,12 +15,6 @@ import random
 #         retrieve a cookie; the function must take a single parameter (the
 #         cookie name) and return a string or None
 #
-#     set_cookie - a function (probably a lambda) which can be used to
-#         set a cookie; the function must take (key,value) as parameters.
-#         (If this is None, then this function won't create a new cookie,
-#         although it *will* update the database with a new session.  It
-#         returns the newly-created sessionID as normal.)
-#
 #     fields - a tuple of strings, giving the fields that you want to read
 #         from the table.  This function will return these values, in the
 #         same order they are listed in this tuple.  If we have to create a
@@ -33,7 +27,8 @@ import random
 # Returns:
 #     A tuple, containing:
 #         The session ID
-#         each of the fields requested in the 'fields' parameter
+#         Each of the fields requested in the 'fields' parameter
+#         A boolean, indicating whether we need to set the "sessionID" cookie
 #
 # Database:
 #
@@ -58,7 +53,9 @@ import random
 
 SESSION_EXPIRATION_OFFSET = "00:30:00"
 
-def get_session(db, get_cookie, set_cookie, fields, commit=True):
+def get_session(db, get_cookie, fields, commit=True):
+    assert get_cookie is not None
+
     # turn the fields into a comma-separated list
     fields = ",".join(fields)
 
@@ -81,14 +78,10 @@ def get_session(db, get_cookie, set_cookie, fields, commit=True):
             cursor.close()
             if commit:
                 db.commit()
-            return (sessionID,) + field_vals
+            return (sessionID,) + field_vals + (False,)
 
     # create a new session ID
     sessionID = "%064x" % random.randint(0, 16**64)
-
-    # set the cookie, if we can.
-    if set_cookie is not None:
-        set_cookie("sessionID", sessionID)
 
     cursor = db.cursor()
     cursor.execute("INSERT INTO sessions(sessionID,expiration) VALUES(%s,ADDTIME(NOW(),%s))", (sessionID,SESSION_EXPIRATION_OFFSET))
@@ -104,7 +97,7 @@ def get_session(db, get_cookie, set_cookie, fields, commit=True):
     field_vals = cursor.fetchall()[0]
     cursor.close()
 
-    return (sessionID,) + field_vals
+    return (sessionID,) + field_vals + (True,)
 
 
 

@@ -58,10 +58,18 @@ TABLE: games
 # persists, but a new record with seq# 2 is created.
 #
 # The actual moves are encoded with standard algebraic notation, generally;
-# we support the special strings WhRes BlRes Draw Pass.  Invalidated moves are
-# not recorded in the database; we simply discover that they are invalidated
-# when we apply the moves to a Board object in Python.  Check is *not*
-# recorded in the database, but checkmate *is*, with a ++ suffix.
+# we support the special strings WhRes BlRes Draw Pass Pending.  Invalidated
+# moves are not recorded in the database; we simply discover that they are
+# invalidated when we apply the moves to a Board object in Python.  Check is
+# *not* recorded in the database, but checkmate *is*, with a ++ suffix.
+#
+# (The "Pending" state is used to mark that a player is now vulnerable to a
+# Pass; this happens when the player chooses update a move in the past.  If
+# their opponent chooses to make an ordinary move at that point, then the
+# Pending will be converted to a Pass, and it's impossible for them to ever
+# change it; however, if the other player moves in the past as well, then the
+# first player will get a chance to fill in their Pending with a regular
+# move.)
 #
 # The worst-case move is thus:
 #      cxd8=Q++

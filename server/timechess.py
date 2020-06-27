@@ -30,24 +30,26 @@ def get_db():
     return request.db_conn
 
 
+
 @app.route("/")
 def index():
     db = get_db()
-    (sessionID, google_account) = sessions.get_session(db,
+    (sessionID, google_account, set_cookie) = sessions.get_session(db,
                                                lambda key: request.cookies.get(key),
-                                               None,
                                                ["google_account"])
 
-    return render_template("index.html", sessionID=sessionID, mail=google_account)
+    retval = render_template("index.html", sessionID=sessionID, mail=google_account)
+    if set_cookie:
+        retval.set_cookie("sessionID", sessionID)
+    return retval
 
 
 
 @app.route("/game/<int:gameID>/<int:halfMoveNum>")
 def game(gameID, halfMoveNum):
     db = get_db()
-    (sessionID, google_account) = sessions.get_session(db,
+    (sessionID, google_account, set_cookie) = sessions.get_session(db,
                                                lambda key: request.cookies.get(key),
-                                               None,
                                                ["google_account"])
 
     # TODO: confirm that the game ID is valid.  Or should this be a function
@@ -70,35 +72,41 @@ def game(gameID, halfMoveNum):
         return url_for("static", filename=path)
     pieces = [ (piece_url(sym),x,y) for (x,y,sym) in game.piece_list_xy() ]
 
-    return render_template("game.html",
-                           gameID=gameID,
-                           history=history, halfMoveNum=halfMoveNum,
-                           legal_moves=legal_moves,
-                           board=str(game.board), pieces=pieces)
+    retval = render_template("game.html",
+                             gameID=gameID,
+                             history=history, halfMoveNum=halfMoveNum,
+                             legal_moves=legal_moves,
+                             board=str(game.board), pieces=pieces)
+    if set_cookie:
+        retval.set_cookie("sessionID", sessionID)
+    return retval
 
 
 
 @app.route("/move", methods=["POST"])
 def move():
     db = get_db()
-    (sessionID, google_account) = sessions.get_session(db,
+    (sessionID, google_account, set_cookie) = sessions.get_session(db,
                                                lambda key: request.cookies.get(key),
-                                               None,
                                                ["google_account"])
 
+
+TODO: move the '++' suffix out of the 'moves' table, and add a 'status' field to games.  This will allow us to check, trivially, if one side or the other has won, which will simplify a lot of checks.
+
+
     # did they pass the required variables?
-    if "gameID" not in request.form or "halfMoveNum" not in request.form or "move" not in request.form:
+    if "gameID" not in request.form or "hmNum" not in request.form or "move" not in request.form:
         TODO
     gameID      = int(request.form["gameID"])
     halfMoveNum = int(request.form["hmNum" ])
     newMove     =     request.form["move"  ]
 
-    if gameID <= 0 or halfMoveNum <= 0 or len(move) == 0:
+    if gameID <= 0 or halfMoveNum <= 0 or len(newMove) == 0:
         TODO
 
     # is the current logged-in person a player on the site?
     cursor = db.cursor()
-    cursor.execute("SELECT players.id FROM sessions,players WHERE sessions.id=%s AND players.google_acount=sessions.google_account", (sessionID,))
+    cursor.execute("SELECT players.id FROM sessions,players WHERE sessions.sessionID=%s AND players.google_account=sessions.google_account", (sessionID,))
     rows = cursor.fetchall()
     cursor.close()
     if len(rows) != 1:
@@ -144,7 +152,7 @@ def move():
     # since we validated the gameID above.)
     #
     # Note that each element (save the None in [0]) is a tuple: (move,seqNum)
-    moves = get_moves(gameID)
+    moves = get_moves(db, gameID)
 
     # is the move too advanced - no connection to it in the history?
     if halfMoveNum > len(moves):
@@ -169,6 +177,8 @@ def move():
         TODO
 
 
+    return str((gameID,halfMoveNum,newMove, sessionID,google_account, playerID, wh,bl, moves))
+
     # looks like (hopefully) we're going to add an update to the database.  To
     # ensure that this is a legal move (and to check for checkmate as a result
     # of this new move), we need to build a Board object which represents the
@@ -177,7 +187,7 @@ def move():
 
     # check to see if the move is legal, given the history that comes
     # before it in the game.
-    if not board.move_is_legal(newMove)
+    if not board.move_is_legal(newMove):
         TODO
 
     # apply the move, and check for checkmate.
@@ -194,7 +204,7 @@ def move():
     # nested query, to set the debug_seq field...this is a new thing for me to
     # try out, and I sure hope I get it right!) - Russ, 26 Jun 2020
     cursor = db.cursor()
-    cursor.execute("INSERT INTO moves(gameID,halfMovNum,seqNum,move,debug_seq) "+
+    cursor.execute("INSERT INTO moves(gameID,halfMoveNum,seqNum,move,debug_seq) "+
                    "VALUES(%s,%s,%s,%s," +
                           "1+SELECT MAX(debug_seq) FROM moves)",
                    (gameID, halfMoveNum, 1+moves[halfMoveNum][1], newMove))
@@ -209,8 +219,65 @@ def move():
     # TODO: wake up Redis server, let it know that a new move has happened.
 
 
-    return redirect(url_for("game",
-                            gameID      = gameID,
-                            halfMoveNum = halfMoveNum+1))
+    retval = redirect(url_for("game",
+                              gameID      = gameID,
+                              halfMoveNum = halfMoveNum+1))
+    if set_cookie:
+        retval.set_cookie("sessionID", sessionID)
+    return retval
+
+
+
+def get_moves(db, gameID):
+    cursor = db.cursor()
+    cursor.execute("SELECT halfMoveNum,seqNum,move FROM moves WHERE gameID=%s ORDER BY halfMoveNum DESC, seqNum DESC", (gameID,))
+    rows = cursor.fetchall()
+    cursor.close()
+
+    retval = [None]
+
+    # we want to collapse any entries which have duplicate halfMoveNum fields.
+    rows = list(rows)
+    while len(rows) > 0:
+        assert rows[-1][1] == 1
+        while len(rows) > 1 and rows[-2][0] == rows[-1][0]:
+            assert rows[-2][1] > rows[-1][1]
+            rows.pop()    # discard one entry
+
+        # sanity check that the halfMoveNum values are sequential; assuming
+        # that's correct, we pop the most move & seqNum into the list of moves
+        # we're going to return
+        assert rows[-1][0] == len(retval)
+        retval.append( rows.pop()[1:][::-1] )
+
+    return retval
+
+
+
+def move_list_has_game_end(moves):
+    for move in moves[1:]:
+        if move[-2:] == "++":
+            return True
+        if move in ["WhRes","BlRes","Draw"]:
+            return True
+    return False
+
+
+
+def build_board_from_move_list(moves):
+    game = TimeChess_Game()
+
+    if moves[-1] == "Pending":
+        moves = moves[:-1]
+
+    for move in moves[1:]:
+        if move[-2:] == "++":
+            assert len(move) > 2
+            game.add_to_history(move[:-2])
+            assert game.is_game_over()
+            break
+        game.add_to_history(move)
+        if game.is_game_over():
+            break
 
 
