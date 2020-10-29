@@ -281,3 +281,39 @@ def build_board_from_move_list(moves):
             break
 
 
+
+@app.route("/ugly/<int:gameID>/<int:halfMoveNum>")
+def ugly(gameID, halfMoveNum):
+    TODO
+
+
+
+@app.route("/rest", methods=["GET"])
+def rest_root():
+    return render_template("rest_root.html")
+
+@app.route("/rest/games", methods=["GET"])
+def rest_games():
+    TODO   # each game should be listed by its *current* position (including half move num)
+
+@app.route("/rest/games/<int:gameID>/<int:halfMoveNum>", methods=["GET"])
+def rest_game():
+    TODO
+
+@app.route("/rest/games/<int:gameID>/<int:halfMoveNum>/history", methods=["GET"])
+def rest_game_history():
+    TODO
+
+@app.route("/rest/games", methods=["POST"])
+def rest_create_game():
+    TODO
+
+@app.route("/rest/games/<int:gameID>", methods=["POST"])
+def rest_make_new_move():
+    TODO
+
+@app.route("/rest/games/<int:gameID>/<int:halfMoveNum>", methods=["PUT"])
+def rest_change_old_move():
+    TODO
+
+
