@@ -72,11 +72,11 @@ def game(gameID, halfMoveNum):
         return url_for("static", filename=path)
     pieces = [ (piece_url(sym),x,y) for (x,y,sym) in game.piece_list_xy() ]
 
-    retval = render_template("game.html",
-                             gameID=gameID,
-                             history=history, halfMoveNum=halfMoveNum,
-                             legal_moves=legal_moves,
-                             board=str(game.board), pieces=pieces)
+    retval = make_response(render_template("game.html",
+                                           gameID=gameID,
+                                           history=history, halfMoveNum=halfMoveNum,
+                                           legal_moves=legal_moves,
+                                           board=str(game.board), pieces=pieces))
     if set_cookie:
         retval.set_cookie("sessionID", sessionID)
     return retval
@@ -91,7 +91,7 @@ def move():
                                                ["google_account"])
 
 
-TODO: move the '++' suffix out of the 'moves' table, and add a 'status' field to games.  This will allow us to check, trivially, if one side or the other has won, which will simplify a lot of checks.
+# TODO: move the '++' suffix out of the 'moves' table, and add a 'status' field to games.  This will allow us to check, trivially, if one side or the other has won, which will simplify a lot of checks.
 
 
     # did they pass the required variables?
