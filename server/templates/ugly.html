@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<p>
+<pre>
+{{board}}
+</pre>
+
+<p>
+    Game ID: {{gameID}}
+<br>Half Move Num: {{halfmoveNum}}
+
+<p>
+{% if halfmoveNum > 0 %}
+    <a href="{{url_for("ugly", gameID=gameID, halfmoveNum=0)}}">first</a>
+    <a href="{{url_for("ugly", gameID=gameID, halfmoveNum=halfmoveNum-1)}}">prev</a>
+{% else %}
+    first prev
+{% endif %}
+
+{% if halfmoveNum < max_move %}
+    <a href="{{url_for("ugly", gameID=gameID, halfmoveNum=halfmoveNum+1)}}">next</a>
+    <a href="{{url_for("ugly", gameID=gameID, halfmoveNum=max_move)}}">last</a>
+{% else %}
+    next last
+{% endif %}
+
+{% endblock %}
+

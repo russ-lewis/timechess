@@ -75,4 +75,7 @@ class TimeChess_Game:
             retval.append( (x,y, piece_map[sq].symbol()) )
         return retval
 
+    def get_simple_drawing(self):
+        return str(self.board)
+
 

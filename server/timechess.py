@@ -10,6 +10,9 @@ import oauth
 
 from timechess_game import TimeChess_Game
 
+from timechess_standard_queries import *
+from timechess_errors           import *
+
 
 
 # this forces all traffic to HTTPS
@@ -152,7 +155,7 @@ def move():
     # since we validated the gameID above.)
     #
     # Note that each element (save the None in [0]) is a tuple: (move,seqNum)
-    moves = get_moves(db, gameID)
+    moves = get_moves(db, gameID, include_seqNum=True)
 
     # is the move too advanced - no connection to it in the history?
     if halfMoveNum > len(moves):
@@ -228,29 +231,29 @@ def move():
 
 
 
-def get_moves(db, gameID):
-    cursor = db.cursor()
-    cursor.execute("SELECT halfMoveNum,seqNum,move FROM moves WHERE gameID=%s ORDER BY halfMoveNum DESC, seqNum DESC", (gameID,))
-    rows = cursor.fetchall()
-    cursor.close()
-
-    retval = [None]
-
-    # we want to collapse any entries which have duplicate halfMoveNum fields.
-    rows = list(rows)
-    while len(rows) > 0:
-        assert rows[-1][1] == 1
-        while len(rows) > 1 and rows[-2][0] == rows[-1][0]:
-            assert rows[-2][1] > rows[-1][1]
-            rows.pop()    # discard one entry
-
-        # sanity check that the halfMoveNum values are sequential; assuming
-        # that's correct, we pop the most move & seqNum into the list of moves
-        # we're going to return
-        assert rows[-1][0] == len(retval)
-        retval.append( rows.pop()[1:][::-1] )
-
-    return retval
+#def get_moves(db, gameID):
+#    cursor = db.cursor()
+#    cursor.execute("SELECT halfMoveNum,seqNum,move FROM moves WHERE gameID=%s ORDER BY halfMoveNum DESC, seqNum DESC", (gameID,))
+#    rows = cursor.fetchall()
+#    cursor.close()
+#
+#    retval = [None]
+#
+#    # we want to collapse any entries which have duplicate halfMoveNum fields.
+#    rows = list(rows)
+#    while len(rows) > 0:
+#        assert rows[-1][1] == 1
+#        while len(rows) > 1 and rows[-2][0] == rows[-1][0]:
+#            assert rows[-2][1] > rows[-1][1]
+#            rows.pop()    # discard one entry
+#
+#        # sanity check that the halfMoveNum values are sequential; assuming
+#        # that's correct, we pop the most move & seqNum into the list of moves
+#        # we're going to return
+#        assert rows[-1][0] == len(retval)
+#        retval.append( rows.pop()[1:][::-1] )
+#
+#    return retval
 
 
 
@@ -280,11 +283,44 @@ def build_board_from_move_list(moves):
         if game.is_game_over():
             break
 
+    return retval
+
 
 
 @app.route("/ugly/<int:gameID>/<int:halfMoveNum>")
 def ugly(gameID, halfMoveNum):
-    TODO
+    try:
+        db = get_db()
+        (sessionID, google_account, set_cookie) = sessions.get_session(db,
+                                                   lambda key: request.cookies.get(key),
+                                                   ["google_account"])
+
+        try:
+            vals = get_game_info(db, gameID)
+            wh = vals["white"]
+            bl = vals["black"]
+        except TC_IDNotFoundError:
+            TODO
+
+        moves = get_moves(db, gameID)
+        max_move = len(moves)-1
+
+        if len(moves)-1 < halfMoveNum:
+            TODO
+        if max_move > halfMoveNum:
+            moves = moves[:halfMoveNum+1]
+
+        game = build_board_from_move_list(moves)
+
+        return render_template("ugly.html",
+                               board       = game.get_simple_drawing(),
+                               gameID      = gameID,
+                               halfmoveNum = halfmoveNum,
+                               max_move    = max_move)
+
+    except TC_DBImpossibleError:
+        TODO
+
 
 
 
@@ -296,24 +332,38 @@ def rest_root():
 def rest_games():
     TODO   # each game should be listed by its *current* position (including half move num)
 
-@app.route("/rest/games/<int:gameID>/<int:halfMoveNum>", methods=["GET"])
-def rest_game():
-    TODO
-
-@app.route("/rest/games/<int:gameID>/<int:halfMoveNum>/history", methods=["GET"])
-def rest_game_history():
-    TODO
-
 @app.route("/rest/games", methods=["POST"])
 def rest_create_game():
+    TODO
+
+@app.route("/rest/games/<int:gameID>", methods=["GET"])
+def rest_game_redirect_to_cur_move():
+    TODO
+
+@app.route("/rest/games/<int:gameID>/<int:halfMoveNum>", methods=["GET"])
+def rest_game():
     TODO
 
 @app.route("/rest/games/<int:gameID>", methods=["POST"])
 def rest_make_new_move():
     TODO
 
+@app.route("/rest/games/<int:gameID>/history", methods=["GET"])
+def rest_game_history():
+    TODO
+
 @app.route("/rest/games/<int:gameID>/<int:halfMoveNum>", methods=["PUT"])
 def rest_change_old_move():
+    TODO
+
+
+
+@app.route("/rest/players", methods=["GET"])
+def rest_players():
+    TODO
+
+@app.route("/rest/players", methods=["POST"])
+def rest_create_player():
     TODO
 
 
