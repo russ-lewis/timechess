@@ -15,10 +15,11 @@ class TimeChess_Game:
         self.board = chess.Board()
 
     def add_to_history(self, move):
-        """Takes a move, and tries to apply it.  Give the old version of the
-           move (including the invalidation mark) if necessary.  Returns the
-           new version of the move (as a string) IF IT CHANGES.  Returns None
-           otherwise.
+        """Takes a move, and tries to apply it.  If the move works, then
+           return True; otherwise, push a null move, and return False.
+           Note that if the move was "Pass", then we push the null move, but
+           then return True (because we successfully pushed the requested
+           move).
         """
 
         # the caller must check for this!
@@ -26,39 +27,21 @@ class TimeChess_Game:
 
         if move == "Pass":
             self.board.push(chess.Move.null())
-            return None
+            return True
 
-        if move == "WhRes":
-            TODO
-        if move == "BlRes":
-            TODO
-        if move == "Draw":
-            TODO
-
-        if move[0] == '~':
-            base_move = move[1:]
-        else:
-            base_move = move
-
-        # attempt the move.  If it's not valid in the current configuration, then
-        # a ValueError will be thrown; in that case, push a null move instead.  In
-        # either case, record the new_move as the result: either base_move, or an
-        # invalidated version of it.
+        # attempt the move.  If it's not valid in the current configuration,
+        # then a ValueError will be thrown; in that case, push a null move
+        # instead.
 
         try:
-            self.board.push_san(base_move)
+            self.board.push_san(move)
             # if we get here, the move succeeded!
-            new_move = base_move
+            return True
+
         except ValueError:
             # if we get here, the move was illegal.
-            new_move = '~'+base_move
-
-        # should the caller update the database?  We tell them by either returning
-        # None (no change), or the updated move string.
-        if new_move == move:
-            return None
-        else:
-            return new_move
+            self.board.push(chess.Move.null())
+            return False
 
     def is_game_over(self):
         return self.board.is_game_over()

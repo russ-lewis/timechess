@@ -274,11 +274,6 @@ def build_board_from_move_list(moves):
         moves = moves[:-1]
 
     for move in moves[1:]:
-        if move[-2:] == "++":
-            assert len(move) > 2
-            game.add_to_history(move[:-2])
-            assert game.is_game_over()
-            break
         game.add_to_history(move)
         if game.is_game_over():
             break
