@@ -13,7 +13,7 @@
 
 <p>
 <pre>
-{{moves}}
+{{history}}
 </pre>
 
 <p>
@@ -30,6 +30,14 @@
 {% else %}
     next last
 {% endif %}
+
+<hr>
+
+<p>
+Make a move: <br>
+{% for move in legal_moves %}
+     <a href="{{url_for("move")}}?gameID={{gameID}}&hmNum={{halfmoveNum+1}}&move={{move}}">{{move}}</a>
+{% endfor %}
 
 {% endblock %}
 

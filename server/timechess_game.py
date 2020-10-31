@@ -43,11 +43,21 @@ class TimeChess_Game:
             self.board.push(chess.Move.null())
             return False
 
+    def apply_move(self, move):
+        # the caller must confirm that this is legal before this happens!
+        self.board.push_san(move)
+
+
+
     def is_game_over(self):
         return self.board.is_game_over()
 
     def legal_moves_san(self):
         return [self.board.san(m) for m in self.board.legal_moves]
+
+    def move_is_legal(self, move):
+        # TODO: Fix terrible design, convert 'move' to the form used by legal_moves, then check more directly
+        return move in self.legal_moves_san()
 
     def piece_list_xy(self):
         piece_map = self.board.piece_map()

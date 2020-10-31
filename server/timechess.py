@@ -86,8 +86,15 @@ def game(gameID, halfMoveNum):
 
 
 
+@app.route("/move", methods=["GET"])
+def move_GET():
+    return move_helper(request.args)
+    
 @app.route("/move", methods=["POST"])
 def move():
+    return move_helper(request.form)
+    
+def move_helper(vars):
     db = get_db()
     (sessionID, google_account, set_cookie) = sessions.get_session(db,
                                                lambda key: request.cookies.get(key),
@@ -98,11 +105,11 @@ def move():
 
 
     # did they pass the required variables?
-    if "gameID" not in request.form or "hmNum" not in request.form or "move" not in request.form:
+    if "gameID" not in vars or "hmNum" not in vars or "move" not in vars:
         TODO
-    gameID      = int(request.form["gameID"])
-    halfMoveNum = int(request.form["hmNum" ])
-    newMove     =     request.form["move"  ]
+    gameID      = int(vars["gameID"])
+    halfMoveNum = int(vars["hmNum" ])
+    newMove     =     vars["move"  ]
 
     if gameID <= 0 or halfMoveNum <= 0 or len(newMove) == 0:
         TODO
@@ -134,10 +141,10 @@ def move():
     # is the player attempting to move for the other side?
     if playerID == wh:
         if halfMoveNum % 2 != 1:
-            TODO
+            pass    # TODO
     else:
         if halfMoveNum % 2 != 0:
-            TODO
+            pass    # TODO
 
     # get the list of moves from the database.  This will report only a
     # *single* move for each halfMoveNum (the most recent one), but it will
@@ -163,30 +170,35 @@ def move():
 
     # is there already a checkmate, anywhere in the move list?  Or any
     # end-of-game marker at all?
-    if move_list_has_game_end(moves):
-        TODO
+    # TODO: handle game-state, which is now in the 'games' table
 
-    # have we already had too many alterations to that move (our DB table can
-    # only hold seqNums up to 9).  Note that this is also useful, even if the
-    # user is not doing anything bad, since we'll need to *set* the seqNum in
-    # the new row we insert soon.
-    assert type(moves[halfMoveNum][1]) == int   # did we remember to conver it?
-    if moves[halfMoveNum][1] == 9:
-        TODO
+    # SIMPLE CASE: Brand-new move
+    if halfMoveNum == len(moves):
+        seqNum = 1
 
-    # is the move in question a "Pass"?  If so, then the player has lost the
-    # chance to move, and can never change it.
-    if moves[halfMoveNum][0] == "Pass":
-        TODO
+    else:
+        # have we already had too many alterations to that move (our DB table can
+        # only hold seqNums up to 9).  Note that this is also useful, even if the
+        # user is not doing anything bad, since we'll need to *set* the seqNum in
+        # the new row we insert soon.
+        assert type(moves[halfMoveNum][1]) == int   # did we remember to convert it?
+        if moves[halfMoveNum][1] == 9:
+            TODO
 
+        # is the move in question a "Pass"?  If so, then the player has lost the
+        # chance to move, and can never change it.
+        if moves[halfMoveNum][0] == "Pass":
+            TODO
 
-    return str((gameID,halfMoveNum,newMove, sessionID,google_account, playerID, wh,bl, moves))
+        seqNum = moves[halfMoveNum][1]+1
+
 
     # looks like (hopefully) we're going to add an update to the database.  To
     # ensure that this is a legal move (and to check for checkmate as a result
     # of this new move), we need to build a Board object which represents the
     # current state (as of the position where we're making a change).
-    board = build_board_from_moves(moves[:halfMoveNum])
+    moves_no_seqNums = [None] + [ m[0] for m in moves[1:] ]
+    board = build_board_from_move_list(moves_no_seqNums[:halfMoveNum])
 
     # check to see if the move is legal, given the history that comes
     # before it in the game.
@@ -196,10 +208,7 @@ def move():
     # apply the move, and check for checkmate.
     board.apply_move(newMove)
 
-    if board.is_checkmate:
-        newMove += "++"
-        TODO
-    if board.game_ended:
+    if board.is_game_over():
         TODO
 
 
@@ -207,10 +216,11 @@ def move():
     # nested query, to set the debug_seq field...this is a new thing for me to
     # try out, and I sure hope I get it right!) - Russ, 26 Jun 2020
     cursor = db.cursor()
-    cursor.execute("INSERT INTO moves(gameID,halfMoveNum,seqNum,move,debug_seq) "+
-                   "VALUES(%s,%s,%s,%s," +
-                          "1+SELECT MAX(debug_seq) FROM moves)",
-                   (gameID, halfMoveNum, 1+moves[halfMoveNum][1], newMove))
+    cursor.execute("""INSERT INTO moves(gameID,halfMoveNum,seqNum,move,debug_seq)
+                      SELECT %s,%s,%s,%s, 1+MAX(debug_seq)
+                      FROM moves
+                      WHERE gameID=gameID""",
+                   (gameID, halfMoveNum, seqNum, newMove))
     if cursor.rowcount != 1:
         TODO
     cursor.close()
@@ -222,9 +232,9 @@ def move():
     # TODO: wake up Redis server, let it know that a new move has happened.
 
 
-    retval = redirect(url_for("game",
+    retval = redirect(url_for("ugly",
                               gameID      = gameID,
-                              halfMoveNum = halfMoveNum+1))
+                              halfmoveNum = halfMoveNum))
     if set_cookie:
         retval.set_cookie("sessionID", sessionID)
     return retval
@@ -254,16 +264,6 @@ def move():
 #        retval.append( rows.pop()[1:][::-1] )
 #
 #    return retval
-
-
-
-def move_list_has_game_end(moves):
-    for move in moves[1:]:
-        if move[-2:] == "++":
-            return True
-        if move in ["WhRes","BlRes","Draw"]:
-            return True
-    return False
 
 
 
@@ -297,31 +297,34 @@ def ugly(gameID, halfmoveNum):
         except TC_IDNotFoundError:
             TODO
 
-        moves = get_moves(db, gameID)
-        max_move = len(moves)-1
+        history = get_moves(db, gameID)
+        max_move = len(history)-1
 
-        moves_display = ""
-        for i in range(1, len(moves), 2):
-            moves_display += "{:2d}. ".format(i/2)
+        history_display = ""
+        for i in range(1, len(history), 2):
+            history_display += "{:2d}. ".format(i/2+1)
 
-            pair = moves[i:i+2]
+            pair = history[i:i+2]
             if len(pair) == 2:
-                moves_display += "{:8s}{}".format(*pair)
+                history_display += "{:8s}{}".format(*pair)
             else:
-                moves_display += pair[0]
-            moves_display += "\n"
-        moves_display = moves_display[:-1]
+                history_display += pair[0]
+            history_display += "\n"
+        history_display = history_display[:-1]
 
-        if len(moves)-1 < halfmoveNum:
+        if len(history)-1 < halfmoveNum:
             TODO
         if max_move > halfmoveNum:
-            moves = moves[:halfmoveNum+1]
+            history = history[:halfmoveNum+1]
 
-        game = build_board_from_move_list(moves)
+        game = build_board_from_move_list(history)
+
+        legal_moves = sorted(game.legal_moves_san())
 
         return render_template("ugly.html",
                                board       = game.get_simple_drawing(),
-                               moves       = moves_display,
+                               history     = history_display,
+                               legal_moves = legal_moves,
                                gameID      = gameID,
                                halfmoveNum = halfmoveNum,
                                max_move    = max_move)
