@@ -58,22 +58,28 @@ TABLE: games
 # persists, but a new record with seq# 2 is created.
 #
 # The actual moves are encoded with standard algebraic notation, generally;
-# we support the special strings WhRes BlRes Draw Pass Pending.  Invalidated
-# moves are not recorded in the database; we simply discover that they are
-# invalidated when we apply the moves to a Board object in Python.  Check is
-# *not* recorded in the database, but checkmate *is*, with a ++ suffix.
+# however, we do not support any of the common suffixes, including + or ++.
+# Instead, we simply record the move, without comment.  (This is because the
+# significance of a move can change, based on edited or invalidated moves,
+# earlier in the sequence, and we don't want a single change to trigger many
+# row updates.)
 #
-# (The "Pending" state is used to mark that a player is now vulnerable to a
-# Pass; this happens when the player chooses update a move in the past.  If
-# their opponent chooses to make an ordinary move at that point, then the
-# Pending will be converted to a Pass, and it's impossible for them to ever
-# change it; however, if the other player moves in the past as well, then the
-# first player will get a chance to fill in their Pending with a regular
-# move.)
+# We do not record invalidated moves directly; instead, we discover them,
+# implicitly, when we try to rebuild the game from the current moves.
+#
+# In addition to the algebraic notation, the "moves" column can also contain
+# various metadata, including:
+#   Pass - the player has been passed (they went back in time, and then their
+#          opponent appended a new move to the *end* of the history)
+#   Pending - the player went back in time, but the opponent has not yet
+#             taken another move; this may be converted to Pass, or removed.
+#
+# Permanent game states, including resignations, draw offers and draw
+# accepted, and checkmate are all recorded in the *game* status field (TBD).
 #
 # The worst-case move is thus:
-#      cxd8=Q++
-# which is 8 characters.  This is why we set the range of the field to 8.
+#      cxd8=Q
+# which is 6 characters.  For safety, we set the width to 8 characters.
 #
 # FINAL NOTE: The debug_seq field is an auto-incrementing counter, which
 #             simply exists so that we can re-create changes that happened to
@@ -85,7 +91,11 @@ TABLE: games
 # UPDATE: I wanted to use AUTO_INCREMENT on debug_seq, but this is not allowed
 #         in SQL (the AUTO field must be part of the key).  So we're going to
 #         have to set the debug_seq by hand.  I don't know exactly how I want
-#         to do that, right now.
+#         to do that, right now.  If we do this explicitly, with a table
+#         search, performance will suck and also we will not be able to handle
+#         parallel insertions!  Maybe just turn it into a timestamp?  What
+#         sort of time-resolution is possible with those?  Or maybe make this
+#         a per-game seqNum???  That would make the search reasonable...
  
 TABLE: moves
    # PRIMARY_KEY(gameID,halfMoveNum,seqNum))
