@@ -12,6 +12,11 @@
 <br>Half Move Num: {{halfmoveNum}}
 
 <p>
+<pre>
+{{moves}}
+</pre>
+
+<p>
 {% if halfmoveNum > 0 %}
     <a href="{{url_for("ugly", gameID=gameID, halfmoveNum=0)}}">first</a>
     <a href="{{url_for("ugly", gameID=gameID, halfmoveNum=halfmoveNum-1)}}">prev</a>

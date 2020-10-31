@@ -283,12 +283,12 @@ def build_board_from_move_list(moves):
         if game.is_game_over():
             break
 
-    return retval
+    return game
 
 
 
-@app.route("/ugly/<int:gameID>/<int:halfMoveNum>")
-def ugly(gameID, halfMoveNum):
+@app.route("/ugly/<int:gameID>/<int:halfmoveNum>")
+def ugly(gameID, halfmoveNum):
     try:
         db = get_db()
         (sessionID, google_account, set_cookie) = sessions.get_session(db,
@@ -305,15 +305,28 @@ def ugly(gameID, halfMoveNum):
         moves = get_moves(db, gameID)
         max_move = len(moves)-1
 
-        if len(moves)-1 < halfMoveNum:
+        moves_display = ""
+        for i in range(1, len(moves), 2):
+            moves_display += "{:2d}. ".format(i/2)
+
+            pair = moves[i:i+2]
+            if len(pair) == 2:
+                moves_display += "{:8s}{}".format(*pair)
+            else:
+                moves_display += pair[0]
+            moves_display += "\n"
+        moves_display = moves_display[:-1]
+
+        if len(moves)-1 < halfmoveNum:
             TODO
-        if max_move > halfMoveNum:
-            moves = moves[:halfMoveNum+1]
+        if max_move > halfmoveNum:
+            moves = moves[:halfmoveNum+1]
 
         game = build_board_from_move_list(moves)
 
         return render_template("ugly.html",
                                board       = game.get_simple_drawing(),
+                               moves       = moves_display,
                                gameID      = gameID,
                                halfmoveNum = halfmoveNum,
                                max_move    = max_move)
