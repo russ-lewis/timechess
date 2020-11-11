@@ -106,9 +106,12 @@ def get_session(db, get_cookie, fields, commit=True):
 def cleanup_old_sessions(db, commit=True):
     cursor = db.cursor()
     cursor.execute("DELETE FROM sessions WHERE expiration<NOW()");
+    retval = cursor.rowcount
     cursor.close()
 
     if commit:
         db.commit()
+
+    return retval
 
 
