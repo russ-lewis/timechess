@@ -138,6 +138,10 @@ def move_helper(vars):
     if playerID not in (wh,bl):
         TODO
 
+    # is it even this player's turn?  If they were the last player to play
+    # in the past, then they cannot play again, until the other side plays.
+    # TODO
+
     # is the player attempting to move for the other side?
     if playerID == wh:
         if halfMoveNum % 2 != 1:
@@ -176,7 +180,17 @@ def move_helper(vars):
     if halfMoveNum == len(moves):
         seqNum = 1
 
+        # TODO: In this case, if the last move (by the other guy) was a
+        #       Pending, then we need to convert it to a Pass.
+
     else:
+        # TODO: In this case, if the last move (by me) was a Pending, we can
+        #       replace it.  If the last move (by the other guy) was a Pending,
+        #       then we should remove that from the move order, in addition
+        #       to adding our new one.  On the other hand, if the last move by
+        #       the other guy was *NOT* a Pending, then we must *add* a Pending
+        #       to the end of our move list (in addition to changing the past)
+
         # have we already had too many alterations to that move (our DB table can
         # only hold seqNums up to 9).  Note that this is also useful, even if the
         # user is not doing anything bad, since we'll need to *set* the seqNum in
